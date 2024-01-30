@@ -1,0 +1,33 @@
+version: '3.1'
+
+x-fdb-base: &fdb-base
+  image: slamjam/foundationdb:fedora40-${FDB_VERSION}
+
+  environment:
+    FDB_COORDINATOR: ${FDB_COORDINATOR}
+    FDB_NETWORKING_MODE: ${FDB_NETWORKING_MODE}
+    FDB_COORDINATOR_PORT: ${FDB_COORDINATOR_PORT}
+
+  restart: always
+
+  volumes:
+    - /var/fdb/data
+
+x-fdb-worker: &fdb-worker
+    <<: *fdb-base
+
+    depends_on:
+      - fdb-coordinator
+
+
+services:
+  fdb-coordinator:
+    <<: *fdb-base
+    ports:
+      - 4500:4500/tcp
+
+  fdb-server-1:
+    <<: *fdb-worker
+
+  fdb-server-2:
+    <<: *fdb-worker

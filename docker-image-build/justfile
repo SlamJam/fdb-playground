@@ -1,0 +1,30 @@
+# Settings
+FDB_VERSION := "7.1.53"
+NPROC := "6"
+
+SRC_DIR := "/foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooundationdb-src"
+
+make_build_container:
+    docker build \
+        -f Dockerfile \
+        --tag slamjam/foundationdb-build:fedora40-latest \
+        --target build \
+        foundationdb-build-context
+
+build_packages SRC_PATH:
+    docker run -it --rm \
+        -e FDB_VERSION="{{FDB_VERSION}}" \
+        -v "$(realpath ./compiling-context)":/build \
+        -v "$(realpath {{SRC_PATH}})":"{{SRC_DIR}}" \
+        -v "$(realpath ./foundationdb-context/packages)":/build/packages \
+        -e NPROC="{{NPROC}}" \
+        slamjam/foundationdb-build:fedora40-latest \
+        /build/build.sh "{{SRC_DIR}}"
+
+make_fdb_container:
+    docker build \
+        -f Dockerfile \
+        --tag slamjam/foundationdb:fedora40-"{{FDB_VERSION}}" \
+        --target server \
+        --build-arg FDB_VERSION="{{FDB_VERSION}}" \
+        foundationdb-context
