@@ -5,13 +5,13 @@ To run a test cluster you first need to build a docker image of FoundationDB. Lo
 After image build we can run `docker-compose`:
 
 ```bash
-just up
-just cli
+> just up
+> just cli
 ```
 
 And init our database:
 
 ```bash
-fdbcli> configure new single ssd
-fdbcli> status
+fdb> configure new single ssd
+fdb> status
 ```
