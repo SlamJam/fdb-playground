@@ -1,8 +1,10 @@
 # FoundationDB Docker Playground
 
-To run a test cluster you first need to build a docker image of FoundationDB. Look here [здесь](./docker-image-build/README.md).
+For automation used [just](https://just.systems) as a more human-oriented `make`. You can get it from [brew](https://brew.sh/).
 
-After image build we can run `docker-compose`:
+To run a test cluster you first need to build a docker image of FoundationDB. Look [here](./docker-image-build/README.md).
+
+After the image is assembled we can run `docker-compose`:
 
 ```bash
 > just up

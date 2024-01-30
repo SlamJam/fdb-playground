@@ -16,8 +16,6 @@ You can see very very long paths this is due to the following:
 >     for component packaging "/usr/src/debug/<CPACK_PACKAGE_FILE_NAME>-<component>"
 > Example: '/usr/src/debug/foundationdb-7.1.53-Linux/clients-el7/src_0'
 
-For automation used `just` as a more human-oriented `make`).
-
 First of all, you need to create an image with assembly dependencies:
 
 `> just make_build_container`
