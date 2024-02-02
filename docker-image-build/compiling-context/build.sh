@@ -8,7 +8,7 @@ ROOT_PATH=$(pwd)
 # For Debug
 # BUILD_PATH="${ROOT_PATH}/build"
 # mkdir -p "${BUILD_PATH}"
-BUILD_PATH=$(mktemp -d '/tmp/foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooundationdb-build.XXXXXXXXXX')
+BUILD_PATH=$(mktemp -d '/tmp/fooooooooooooooooooooooooooooooooooooooooooundationdb-build.XXXXXXXXXX')
 
 
 pushd "${SRC_PATH}"

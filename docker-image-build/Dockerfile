@@ -1,4 +1,4 @@
-FROM fedora:40 as base
+FROM fedora:39 as base
 
 FROM base as build
     WORKDIR /build
@@ -31,14 +31,11 @@ FROM base as server
 
     RUN test -n "$FDB_VERSION" || (echo "FDB_VERSION is not set" && false)
 
-    COPY packages/* /tmp/packages/
-    COPY --chmod=+x fdb.bash /var/fdb/scripts/fdb.bash
+    COPY packages/foundationdb-clients-${FDB_VERSION}-1.el7.aarch64.rpm \
+         packages/foundationdb-server-${FDB_VERSION}-1.el7.aarch64.rpm \
+         /tmp/packages/
 
-    RUN (test -f /tmp/packages/foundationdb-clients-${FDB_VERSION}-1.el7.aarch64.rpm \
-        || (echo "absent foundationdb-clients-${FDB_VERSION}-1.el7.aarch64.rpm" && false)) \
-        && (test -f /tmp/packages/foundationdb-server-${FDB_VERSION}-1.el7.aarch64.rpm \
-        || (echo "absent foundationdb-server-${FDB_VERSION}-1.el7.aarch64.rpm" && false)) \
-        && dnf localinstall -y \
+    RUN dnf localinstall -y \
         /tmp/packages/foundationdb-clients-${FDB_VERSION}-1.el7.aarch64.rpm \
         /tmp/packages/foundationdb-server-${FDB_VERSION}-1.el7.aarch64.rpm \
         && rm -rf /tmp/packages \
@@ -48,6 +45,8 @@ FROM base as server
         && dnf clean all \
         && rm -rf /var/cache/* \
         && mkdir -p /var/fdb/{logs,tmp,lib}
+
+    COPY --chmod=+x fdb.bash /var/fdb/scripts/fdb.bash
 
     WORKDIR /var/fdb
     VOLUME /var/fdb/data

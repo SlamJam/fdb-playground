@@ -1,17 +1,14 @@
-version: '3.1'
+version: '3.8'
 
 x-fdb-base: &fdb-base
-  image: slamjam/foundationdb:fedora40-${FDB_VERSION}
+  image: slamjam/foundationdb:fedora-${FDB_VERSION}
 
-  environment:
+  environment: &env
     FDB_COORDINATOR: ${FDB_COORDINATOR}
     FDB_NETWORKING_MODE: ${FDB_NETWORKING_MODE}
     FDB_COORDINATOR_PORT: ${FDB_COORDINATOR_PORT}
 
   restart: always
-
-  volumes:
-    - /var/fdb/data
 
 x-fdb-worker: &fdb-worker
     <<: *fdb-base
@@ -25,9 +22,43 @@ services:
     <<: *fdb-base
     ports:
       - 4500:4500/tcp
+    volumes:
+      - coordinator_data:/var/fdb/data
+      - ./logs:/var/fdb/logs
 
   fdb-server-1:
     <<: *fdb-worker
 
+    volumes:
+      - server_1_data:/var/fdb/data
+      - ./logs:/var/fdb/logs
+
   fdb-server-2:
     <<: *fdb-worker
+
+    volumes:
+      - server_2_data:/var/fdb/data
+      - ./logs:/var/fdb/logs
+
+  fdb-single-node:
+    <<: *fdb-base
+    ports:
+      - 4550:4550/tcp
+
+    environment:
+      <<: *env
+
+      FDB_COORDINATOR: "fdb-single-node"
+      FDB_NETWORKING_MODE: "host"
+      FDB_PORT: 4550
+      FDB_CLUSTER_FILE_CONTENTS: "docker:docker@127.0.0.1:4550"
+
+    volumes:
+      - single_node_data:/var/fdb/data
+      - ./logs:/var/fdb/logs
+
+volumes:
+  coordinator_data:
+  server_1_data:
+  server_2_data:
+  single_node_data:

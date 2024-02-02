@@ -1,14 +1,20 @@
+
+DOCKER := "docker"
+
 up:
-    docker compose up --remove-orphans -d
+    {{DOCKER}} compose up --remove-orphans -d
 
 stop:
-    docker compose stop
+    {{DOCKER}} compose stop
 
 down:
     @ /bin/echo -n "Are you sure?: "
     @ read answer && [ $answer = "y" ]
-    docker compose down --remove-orphans --volumes
+    {{DOCKER}} compose down --remove-orphans --volumes
 
-cli:
+cli-cluster:
     #on coordinator there is fbd.cluster file
-    docker compose exec -i fdb-coordinator fdbcli
+    {{DOCKER}} compose exec -i fdb-coordinator fdbcli
+
+cli-single-node:
+    {{DOCKER}} compose exec -i fdb-single-node fdbcli

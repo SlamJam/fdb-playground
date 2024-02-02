@@ -63,7 +63,8 @@ function create_server_environment() {
 create_server_environment
 source /var/fdb/.fdbenv
 echo "Starting FDB server on $PUBLIC_IP:$FDB_PORT"
-fdbserver --listen-address 0.0.0.0:"$FDB_PORT" --public-address "$PUBLIC_IP:$FDB_PORT" \
+fdbserver --listen-address 0.0.0.0:"$FDB_PORT" \
+    --public-address "$PUBLIC_IP:$FDB_PORT" \
     --datadir /var/fdb/data --logdir /var/fdb/logs \
     --locality-zoneid="$(hostname)" \
     --locality-machineid="$(hostname)" \
